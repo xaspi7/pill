@@ -497,12 +497,6 @@
       left: -10px;
       color: var(--accent);
     }
-
-    .insights-note {
-      font-size: 11px;
-      color: var(--muted);
-      margin-top: 4px;
-    }
   </style>
 </head>
 <body>
@@ -512,7 +506,7 @@
         <div class="title-logo">Δ</div>
         <div class="title-text">
           <h1>Tracker látek a doplňků</h1>
-          <p>Lokální log pro NAC, ashwagandhu, kratom, alkohol a cokoliv dalšího.</p>
+          <p>Lokální log pro NAC, ashwagandhu, kratom, alkohol a další věci.</p>
         </div>
       </div>
       <div class="tag">
@@ -527,7 +521,7 @@
         <div class="card-header">
           <div>
             <div class="card-title">Nový záznam</div>
-            <div class="card-subtitle">Jedna dávka / situace, včetně toho, jak ses cítil.</div>
+            <div class="card-subtitle">Jedna dávka / situace, plus jak ses cítil.</div>
           </div>
         </div>
 
@@ -602,7 +596,7 @@
               placeholder="Spánek, vedlejší účinky, kombinace, stres, cokoliv…"
             ></textarea>
             <div class="helper-text">
-              Piš věci, které tě pak zajímají zpětně: kvalita spánku, úzkost, fyzické pocity.
+              Piš, co tě bude zajímat zpětně: kvalita spánku, úzkost, fyzické pocity.
             </div>
           </div>
 
@@ -616,7 +610,7 @@
           </div>
 
           <div class="danger-text" style="grid-column: 1 / -1;">
-            Suplementy, alkohol ani appka z ničeho nedělají zdravý návyk. Sleduješ realitu, neomlouváš ji.
+            Suplementy, alkohol ani appka z ničeho nedělají zdravý návyk.
           </div>
         </form>
       </section>
@@ -625,19 +619,16 @@
       <section class="card">
         <div class="card-header">
           <div>
-            <div class="card-title">Přehled & data</div>
+            <div class="card-title">Dnešní přehled</div>
             <div class="card-subtitle">
-              Lokální log – filtruj podle látky a období.
+              Krátké doporučení podle toho, co máš poslední dny v logu.
             </div>
           </div>
         </div>
 
         <div class="insights" id="insights">
-          <div class="insights-title">Dnešní doporučení (heuristika)</div>
+          <div class="insights-title">Dnešní doporučení</div>
           <ul class="insights-list" id="insights-list"></ul>
-          <div class="insights-note">
-            Je to jen jednoduché vyhodnocení tvých záznamů, ne lékařské doporučení ani „povolenka“ k alkoholu.
-          </div>
         </div>
 
         <div class="summary-grid" id="summary">
@@ -916,28 +907,49 @@
 
       // Alkohol v posledních 24h
       if (hoursSince !== null && hoursSince <= 24) {
-        insights.push("Máš záznam alkoholu v posledních 24 hodinách. Bezpečnější je teď nepřidávat další alkohol ani jiné látky či doplňky.");
+        insights.push("V posledních 24 hodinách máš alkohol. Teď k tomu nepřidávej další alkohol ani jiné látky.");
       }
 
       // Kratom dnes
       if (kratomToday) {
-        insights.push("Dnes máš lognutý kratom. Kombinace s alkoholem zvyšuje zátěž a rizika, takže alkohol je dnes spíš špatný nápad.");
+        insights.push("Dnes máš kratom. Alkohol k tomu nedávej – zbytečně zvyšuješ zátěž i rizika.");
       }
 
       // Ashwagandha – časté užívání
       if (ashwCount7 >= 5) {
-        insights.push(`Ashwagandhu bereš často (${ashwCount7}× za posledních 7 dní). Adaptogeny je dobré cyklovat – dnešní pauza dává smysl.`);
+        insights.push(`Ashwagandhu máš často (${ashwCount7}× za posledních 7 dní). Dnešek ber spíš jako pauzu.`);
       } else if (!ashwToday && !alcoholToday && !kratomToday) {
-        insights.push("Ashwagandhu jsi dnes ještě nebral. Pokud ji chceš použít kvůli stresu nebo spánku, rozumnější je spíš večer a bez alkoholu okolo.");
+        insights.push("Dnes nemáš ashwagandhu ani alkohol. Pokud chceš večer něco na zklidnění, drž se maximálně jedné věci (např. ashwagandha) a bez alkoholu kolem.");
       }
 
       // NAC – dlouhodobé užívání
       if (nacCount7 >= 6) {
-        insights.push(`NAC máš skoro denně (${nacCount7}× za posledních 7 dní). Zkus si občas ověřit, jestli pro tak časté užívání máš reálný důvod.`);
+        insights.push(`NAC máš skoro denně (${nacCount7}× za posledních 7 dní). Zkus si občas dát pár dní bez něj a zjistit, jestli ho fakt potřebuješ.`);
+      }
+
+      // Více dní bez alkoholu/látek – to je signál, ne povolenka
+      const lastTwoDays = [];
+      for (let i = 0; i < 2; i++) {
+        const d = new Date(now.getTime() - i * 24 * 60 * 60 * 1000);
+        const ys = d.getFullYear();
+        const ms = String(d.getMonth() + 1).padStart(2, "0");
+        const ds = String(d.getDate()).padStart(2, "0");
+        lastTwoDays.push(`${ys}-${ms}-${ds}`);
+      }
+
+      const lastTwoCleanish = lastTwoDays.every(date =>
+        !entries.some(e =>
+          e.date === date &&
+          (e.substance === "Alkohol" || getSubstanceClass(e.substance, e.customSubstance) === "substance-kratom")
+        )
+      );
+
+      if (lastTwoCleanish && !alcoholToday && !kratomToday && hoursSince === null) {
+        insights.push("Poslední dva dny v logu nemáš alkohol ani kratom. Pokud plánuješ nějaký večerní experiment, drž dávku při zemi a nemíchej to s dalšími věcmi.");
       }
 
       if (insights.length === 0) {
-        insights.push("Z dnešních dat nevyplývá nic zásadního. Pořád ale platí, že nejméně rizikovou volbou je alkohol vynechat úplně.");
+        insights.push("Z dnešních záznamů nic extra nevyčnívá. Platí, že čím míň kombinací a čím víc pauz, tím líp.");
       }
 
       return insights;
