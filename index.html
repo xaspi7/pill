@@ -1,1 +1,977 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8" />
+  <title>Tracker látek a doplňků</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg: #0f172a;
+      --bg-alt: #111827;
+      --card: #020617;
+      --accent: #22c55e;
+      --accent-soft: rgba(34, 197, 94, 0.12);
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --border: #1f2937;
+      --danger: #ef4444;
+      --radius-lg: 16px;
+      --radius-md: 10px;
+      --shadow-soft: 0 18px 45px rgba(0, 0, 0, 0.55);
+      --shadow-chip: 0 0 0 1px #1f2937;
+      --transition-fast: 0.15s ease-out;
+      --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+        "Segoe UI", sans-serif;
+    }
 
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: var(--font-sans);
+      background: radial-gradient(circle at top, #1f2937 0, #020617 55%);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 1200px;
+      padding: 24px 16px 40px;
+    }
+
+    @media (min-width: 900px) {
+      .app {
+        padding: 32px 8px 48px;
+      }
+    }
+
+    .header {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .title-logo {
+      width: 34px;
+      height: 34px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 20% 0%, #22c55e, #16a34a, #0f766e);
+      box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.9),
+        0 14px 30px rgba(22, 163, 74, 0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      color: white;
+      font-weight: 700;
+    }
+
+    .title-text h1 {
+      margin: 0;
+      font-size: 22px;
+      letter-spacing: 0.02em;
+    }
+
+    .title-text p {
+      margin: 4px 0 0;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .tag {
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(55, 65, 81, 0.8);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .tag-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: var(--accent);
+      box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.25);
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 1.1fr 2fr;
+      gap: 18px;
+      align-items: flex-start;
+    }
+
+    @media (max-width: 900px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card {
+      background: radial-gradient(circle at top left, #020617, #020617 40%, #020617);
+      border-radius: var(--radius-lg);
+      padding: 18px 18px 16px;
+      border: 1px solid rgba(31, 41, 55, 0.95);
+      box-shadow: var(--shadow-soft);
+      backdrop-filter: blur(16px);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 10px;
+      gap: 8px;
+    }
+
+    .card-title {
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .card-subtitle {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 8px;
+      margin-top: 4px;
+    }
+
+    .pill {
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid rgba(55, 65, 81, 0.85);
+      font-size: 11px;
+      color: var(--muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .pill strong {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    form {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px 10px;
+      margin-top: 8px;
+    }
+
+    @media (max-width: 600px) {
+      form {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 13px;
+    }
+
+    .field label {
+      color: var(--muted);
+    }
+
+    .field-row {
+      display: flex;
+      gap: 8px;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    input[type="date"],
+    input[type="time"],
+    select,
+    textarea {
+      background: rgba(15, 23, 42, 0.95);
+      border-radius: var(--radius-md);
+      border: 1px solid rgba(55, 65, 81, 0.85);
+      padding: 7px 9px;
+      font-size: 13px;
+      color: var(--text);
+      outline: none;
+      transition: border-color var(--transition-fast), box-shadow var(--transition-fast),
+        background var(--transition-fast), transform 0.08s ease-out;
+      font-family: inherit;
+    }
+
+    input::placeholder,
+    textarea::placeholder {
+      color: #6b7280;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 1px rgba(34, 197, 94, 0.5);
+      background: #020617;
+      transform: translateY(-0.5px);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 60px;
+    }
+
+    .helper-text {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .btn-primary,
+    .btn-ghost,
+    .btn-danger {
+      border-radius: 999px;
+      border: none;
+      font-size: 13px;
+      padding: 7px 14px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      transition: background var(--transition-fast), transform 0.08s ease-out,
+        box-shadow var(--transition-fast), opacity var(--transition-fast);
+      font-family: inherit;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      color: #022c22;
+      box-shadow: 0 14px 30px rgba(34, 197, 94, 0.4);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 20px 40px rgba(34, 197, 94, 0.5);
+    }
+
+    .btn-primary:active {
+      transform: translateY(0);
+      box-shadow: 0 10px 24px rgba(34, 197, 94, 0.35);
+    }
+
+    .btn-ghost {
+      background: rgba(15, 23, 42, 0.92);
+      color: var(--muted);
+      border: 1px solid rgba(55, 65, 81, 0.85);
+      box-shadow: var(--shadow-chip);
+    }
+
+    .btn-ghost:hover {
+      background: rgba(17, 24, 39, 0.96);
+      color: var(--text);
+    }
+
+    .btn-danger {
+      background: rgba(127, 29, 29, 0.95);
+      color: #fee2e2;
+      box-shadow: 0 10px 25px rgba(248, 113, 113, 0.35);
+    }
+
+    .btn-danger:hover {
+      background: rgba(185, 28, 28, 0.98);
+      transform: translateY(-1px);
+    }
+
+    .form-actions {
+      margin-top: 6px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .table-wrapper {
+      margin-top: 8px;
+      border-radius: 12px;
+      border: 1px solid rgba(31, 41, 55, 0.95);
+      background: radial-gradient(circle at top left, #020617, #020617 60%, #020617);
+      overflow: hidden;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+
+    thead {
+      background: rgba(15, 23, 42, 0.98);
+    }
+
+    th,
+    td {
+      padding: 8px 10px;
+      border-bottom: 1px solid rgba(31, 41, 55, 0.9);
+      text-align: left;
+    }
+
+    th {
+      font-weight: 500;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    tbody tr:nth-child(even) {
+      background: rgba(15, 23, 42, 0.7);
+    }
+
+    tbody tr:nth-child(odd) {
+      background: rgba(15, 23, 42, 0.95);
+    }
+
+    tbody tr:hover {
+      background: rgba(17, 24, 39, 0.98);
+    }
+
+    .pill-mini {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 7px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(55, 65, 81, 0.85);
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .pill-mini.substance-nac {
+      border-color: rgba(56, 189, 248, 0.8);
+      color: #e0f2fe;
+      background: rgba(8, 47, 73, 0.85);
+    }
+
+    .pill-mini.substance-ashwagandha {
+      border-color: rgba(74, 222, 128, 0.85);
+      color: #dcfce7;
+      background: rgba(22, 101, 52, 0.8);
+    }
+
+    .pill-mini.substance-kratom {
+      border-color: rgba(250, 204, 21, 0.85);
+      color: #fef9c3;
+      background: rgba(113, 63, 18, 0.9);
+    }
+
+    .pill-mini.substance-other {
+      border-color: rgba(148, 163, 184, 0.9);
+    }
+
+    .badge-mood {
+      font-size: 11px;
+      padding: 2px 7px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(55, 65, 81, 0.85);
+      color: var(--muted);
+    }
+
+    .badge-mood.good {
+      border-color: rgba(34, 197, 94, 0.9);
+      color: #bbf7d0;
+      background: rgba(22, 101, 52, 0.85);
+    }
+
+    .badge-mood.bad {
+      border-color: rgba(248, 113, 113, 0.9);
+      color: #fee2e2;
+      background: rgba(127, 29, 29, 0.85);
+    }
+
+    .notes-cell {
+      max-width: 260px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 6px;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .filters-left,
+    .filters-right {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .filters label {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .filters input,
+    .filters select {
+      font-size: 12px;
+      padding: 5px 8px;
+      border-radius: 999px;
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 6px;
+    }
+
+    @media (max-width: 900px) {
+      .summary-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    .summary-chip {
+      border-radius: 14px;
+      padding: 8px 10px;
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid rgba(55, 65, 81, 0.9);
+      font-size: 11px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .summary-chip-label {
+      color: var(--muted);
+    }
+
+    .summary-chip-value {
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .summary-chip.substance-nac {
+      border-color: rgba(56, 189, 248, 0.8);
+    }
+
+    .summary-chip.substance-ashwagandha {
+      border-color: rgba(74, 222, 128, 0.9);
+    }
+
+    .summary-chip.substance-kratom {
+      border-color: rgba(250, 204, 21, 0.85);
+    }
+
+    .summary-chip.substance-other {
+      border-color: rgba(148, 163, 184, 0.9);
+    }
+
+    .empty-state {
+      padding: 12px;
+      font-size: 12px;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .danger-text {
+      color: #fecaca;
+      font-size: 11px;
+      margin-top: 6px;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="header">
+      <div class="title">
+        <div class="title-logo">Δ</div>
+        <div class="title-text">
+          <h1>Tracker látek a doplňků</h1>
+          <p>Lokální log pro NAC, ashwagandhu, kratom a cokoliv dalšího.</p>
+        </div>
+      </div>
+      <div class="tag">
+        <span class="tag-dot"></span>
+        <span>Data se ukládají jen do tvého prohlížeče</span>
+      </div>
+    </header>
+
+    <div class="layout">
+      <!-- FORM CARD -->
+      <section class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Nový záznam</div>
+            <div class="card-subtitle">Jedna dávka / situace, včetně toho, jak ses cítil.</div>
+          </div>
+        </div>
+
+        <form id="entry-form">
+          <div class="field">
+            <label for="date">Datum</label>
+            <input type="date" id="date" name="date" required />
+          </div>
+
+          <div class="field">
+            <label for="time">Čas</label>
+            <input type="time" id="time" name="time" required />
+          </div>
+
+          <div class="field">
+            <label for="substance">Látka / doplněk</label>
+            <select id="substance" name="substance" required>
+              <option value="">Vyber…</option>
+              <option value="NAC">NAC</option>
+              <option value="Ashwagandha">Ashwagandha</option>
+              <option value="Kratom">Kratom</option>
+              <option value="Jiné">Jiné (vlastní)</option>
+            </select>
+          </div>
+
+          <div class="field" id="custom-substance-field" style="display:none;">
+            <label for="customSubstance">Název látky (pokud „Jiné“)</label>
+            <input
+              type="text"
+              id="customSubstance"
+              name="customSubstance"
+              placeholder="Např. magnesium, melatonin…"
+            />
+          </div>
+
+          <div class="field">
+            <label for="dose">Dávka</label>
+            <input
+              type="text"
+              id="dose"
+              name="dose"
+              placeholder="Např. 600 mg, 1 kapsle, 3 g…"
+              required
+            />
+          </div>
+
+          <div class="field">
+            <label for="mood">Stav / pocit (1 = mizerně, 5 = v pohodě)</label>
+            <input
+              type="number"
+              id="mood"
+              name="mood"
+              min="1"
+              max="5"
+              value="3"
+              required
+            />
+          </div>
+
+          <div class="field" style="grid-column: 1 / -1;">
+            <label for="notes">Poznámky</label>
+            <textarea
+              id="notes"
+              name="notes"
+              placeholder="Spánek, vedlejší účinky, kombinace, stres, cokoliv…"
+            ></textarea>
+            <div class="helper-text">
+              Piš věci, které tě pak zajímají zpětně: kvalita spánku, úzkost, fyzické pocity.
+            </div>
+          </div>
+
+          <div class="form-actions" style="grid-column: 1 / -1;">
+            <button type="submit" class="btn-primary">
+              <span>Uložit záznam</span>
+            </button>
+            <button type="button" id="reset-form" class="btn-ghost">
+              Vyčistit formulář
+            </button>
+          </div>
+
+          <div class="danger-text" style="grid-column: 1 / -1;">
+            Suplementy ani appka ti z ničeho nedělají zdravý návyk. Sleduješ realitu, neomlouváš ji.
+          </div>
+        </form>
+      </section>
+
+      <!-- LIST / STATS CARD -->
+      <section class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Přehled & data</div>
+            <div class="card-subtitle">
+              Lokální log – filtruj podle látky a období.
+            </div>
+          </div>
+        </div>
+
+        <div class="summary-grid" id="summary">
+          <div class="summary-chip substance-nac">
+            <div class="summary-chip-label">NAC (posledních 7 dní)</div>
+            <div class="summary-chip-value" id="summary-nac">0</div>
+          </div>
+          <div class="summary-chip substance-ashwagandha">
+            <div class="summary-chip-label">Ashwagandha (posledních 7 dní)</div>
+            <div class="summary-chip-value" id="summary-ashwagandha">0</div>
+          </div>
+          <div class="summary-chip substance-kratom">
+            <div class="summary-chip-label">Kratom (posledních 7 dní)</div>
+            <div class="summary-chip-value" id="summary-kratom">0</div>
+          </div>
+          <div class="summary-chip substance-other">
+            <div class="summary-chip-label">Jiné (posledních 7 dní)</div>
+            <div class="summary-chip-value" id="summary-other">0</div>
+          </div>
+        </div>
+
+        <div class="filters">
+          <div class="filters-left">
+            <label>
+              Látka:
+              <select id="filter-substance">
+                <option value="">Vše</option>
+                <option value="NAC">NAC</option>
+                <option value="Ashwagandha">Ashwagandha</option>
+                <option value="Kratom">Kratom</option>
+                <option value="Jiné">Jiné</option>
+              </select>
+            </label>
+            <label>
+              Od:
+              <input type="date" id="filter-from" />
+            </label>
+            <label>
+              Do:
+              <input type="date" id="filter-to" />
+            </label>
+          </div>
+          <div class="filters-right">
+            <button type="button" class="btn-ghost" id="apply-filters">
+              Použít filtr
+            </button>
+            <button type="button" class="btn-ghost" id="clear-filters">
+              Vymazat filtr
+            </button>
+            <button type="button" class="btn-danger" id="clear-all">
+              Smazat všechna data
+            </button>
+          </div>
+        </div>
+
+        <div class="table-wrapper" id="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Datum</th>
+                <th>Čas</th>
+                <th>Látka</th>
+                <th>Dávka</th>
+                <th>Stav</th>
+                <th>Poznámky</th>
+              </tr>
+            </thead>
+            <tbody id="entries-body">
+              <!-- dynamicky -->
+            </tbody>
+          </table>
+        </div>
+        <div class="empty-state" id="empty-state" style="display:none;">
+          Zatím tu nic není. Přidej první záznam vlevo.
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    const STORAGE_KEY = "hm_tracker_entries";
+
+    function loadEntries() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return [];
+        const parsed = JSON.parse(raw);
+        if (!Array.isArray(parsed)) return [];
+        return parsed;
+      } catch (e) {
+        console.error("Chyba při čtení localStorage", e);
+        return [];
+      }
+    }
+
+    function saveEntries(entries) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
+    }
+
+    function getSubstanceLabel(entry) {
+      if (entry.substance === "Jiné" && entry.customSubstance) {
+        return entry.customSubstance;
+      }
+      return entry.substance;
+    }
+
+    function getSubstanceClass(substance, custom) {
+      const label = substance === "Jiné" ? (custom || "").toLowerCase() : substance.toLowerCase();
+      if (label.includes("nac")) return "substance-nac";
+      if (label.includes("ashwagandha")) return "substance-ashwagandha";
+      if (label.includes("kratom")) return "substance-kratom";
+      return "substance-other";
+    }
+
+    function renderEntries(entries, filters = {}) {
+      const body = document.getElementById("entries-body");
+      const empty = document.getElementById("empty-state");
+
+      body.innerHTML = "";
+
+      // filtrování
+      let filtered = [...entries];
+      if (filters.substance) {
+        filtered = filtered.filter((e) => e.substance === filters.substance);
+      }
+      if (filters.from) {
+        filtered = filtered.filter((e) => e.date >= filters.from);
+      }
+      if (filters.to) {
+        filtered = filtered.filter((e) => e.date <= filters.to);
+      }
+
+      // seřadit od nejnovějšího
+      filtered.sort((a, b) => {
+        const ad = a.date + "T" + (a.time || "00:00");
+        const bd = b.date + "T" + (b.time || "00:00");
+        return bd.localeCompare(ad);
+      });
+
+      if (filtered.length === 0) {
+        empty.style.display = "block";
+      } else {
+        empty.style.display = "none";
+      }
+
+      for (const entry of filtered) {
+        const tr = document.createElement("tr");
+
+        const dateTd = document.createElement("td");
+        dateTd.textContent = entry.date;
+        tr.appendChild(dateTd);
+
+        const timeTd = document.createElement("td");
+        timeTd.textContent = entry.time || "";
+        tr.appendChild(timeTd);
+
+        const substanceTd = document.createElement("td");
+        const pill = document.createElement("span");
+        pill.className =
+          "pill-mini " + getSubstanceClass(entry.substance, entry.customSubstance);
+        pill.textContent = getSubstanceLabel(entry);
+        substanceTd.appendChild(pill);
+        tr.appendChild(substanceTd);
+
+        const doseTd = document.createElement("td");
+        doseTd.textContent = entry.dose || "";
+        tr.appendChild(doseTd);
+
+        const moodTd = document.createElement("td");
+        const moodSpan = document.createElement("span");
+        let moodClass = "badge-mood";
+        if (entry.mood <= 2) moodClass += " bad";
+        if (entry.mood >= 4) moodClass += " good";
+        moodSpan.className = moodClass;
+        moodSpan.textContent = entry.mood ? `${entry.mood}/5` : "-";
+        moodTd.appendChild(moodSpan);
+        tr.appendChild(moodTd);
+
+        const notesTd = document.createElement("td");
+        notesTd.className = "notes-cell";
+        notesTd.title = entry.notes || "";
+        notesTd.textContent = entry.notes || "";
+        tr.appendChild(notesTd);
+
+        body.appendChild(tr);
+      }
+    }
+
+    function renderSummary(entries) {
+      const now = new Date();
+      const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+
+      const counts = {
+        nac: 0,
+        ashwagandha: 0,
+        kratom: 0,
+        other: 0,
+      };
+
+      for (const entry of entries) {
+        if (!entry.date) continue;
+        const dt = new Date(entry.date + "T" + (entry.time || "00:00"));
+        if (isNaN(dt.getTime())) continue;
+        if (dt < sevenDaysAgo) continue;
+
+        const cls = getSubstanceClass(entry.substance, entry.customSubstance);
+        if (cls === "substance-nac") counts.nac++;
+        else if (cls === "substance-ashwagandha") counts.ashwagandha++;
+        else if (cls === "substance-kratom") counts.kratom++;
+        else counts.other++;
+      }
+
+      document.getElementById("summary-nac").textContent = counts.nac;
+      document.getElementById("summary-ashwagandha").textContent =
+        counts.ashwagandha;
+      document.getElementById("summary-kratom").textContent = counts.kratom;
+      document.getElementById("summary-other").textContent = counts.other;
+    }
+
+    function setTodayDefaults() {
+      const dateInput = document.getElementById("date");
+      const timeInput = document.getElementById("time");
+      const now = new Date();
+      const yyyy = now.getFullYear();
+      const mm = String(now.getMonth() + 1).padStart(2, "0");
+      const dd = String(now.getDate()).padStart(2, "0");
+      const hh = String(now.getHours()).padStart(2, "0");
+      const mi = String(now.getMinutes()).padStart(2, "0");
+
+      if (!dateInput.value) dateInput.value = `${yyyy}-${mm}-${dd}`;
+      if (!timeInput.value) timeInput.value = `${hh}:${mi}`;
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const entries = loadEntries();
+      setTodayDefaults();
+      renderEntries(entries);
+      renderSummary(entries);
+
+      const form = document.getElementById("entry-form");
+      const resetBtn = document.getElementById("reset-form");
+      const clearAllBtn = document.getElementById("clear-all");
+      const filterSubstance = document.getElementById("filter-substance");
+      const filterFrom = document.getElementById("filter-from");
+      const filterTo = document.getElementById("filter-to");
+      const applyFiltersBtn = document.getElementById("apply-filters");
+      const clearFiltersBtn = document.getElementById("clear-filters");
+      const substanceSelect = document.getElementById("substance");
+      const customSubstanceField = document.getElementById(
+        "custom-substance-field"
+      );
+
+      substanceSelect.addEventListener("change", () => {
+        if (substanceSelect.value === "Jiné") {
+          customSubstanceField.style.display = "flex";
+        } else {
+          customSubstanceField.style.display = "none";
+          document.getElementById("customSubstance").value = "";
+        }
+      });
+
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const formData = new FormData(form);
+        const date = formData.get("date");
+        const time = formData.get("time");
+        const substance = formData.get("substance");
+        const customSubstance = formData.get("customSubstance")?.trim();
+        const dose = formData.get("dose");
+        const mood = Number(formData.get("mood") || 0);
+        const notes = formData.get("notes")?.toString().trim();
+
+        if (!date || !time || !substance || !dose) {
+          alert("Vyplň minimálně datum, čas, látku a dávku.");
+          return;
+        }
+
+        const newEntry = {
+          id: Date.now(),
+          date,
+          time,
+          substance,
+          customSubstance: substance === "Jiné" ? customSubstance : "",
+          dose,
+          mood: isNaN(mood) ? null : mood,
+          notes,
+        };
+
+        const current = loadEntries();
+        current.push(newEntry);
+        saveEntries(current);
+        renderEntries(current, {
+          substance: filterSubstance.value || "",
+          from: filterFrom.value || "",
+          to: filterTo.value || "",
+        });
+        renderSummary(current);
+
+        form.reset();
+        setTodayDefaults();
+        customSubstanceField.style.display =
+          substanceSelect.value === "Jiné" ? "flex" : "none";
+      });
+
+      resetBtn.addEventListener("click", () => {
+        form.reset();
+        setTodayDefaults();
+        customSubstanceField.style.display =
+          substanceSelect.value === "Jiné" ? "flex" : "none";
+      });
+
+      clearAllBtn.addEventListener("click", () => {
+        if (
+          confirm(
+            "Fakt chceš smazat všechna uložená data? Tohle nejde vrátit."
+          )
+        ) {
+          localStorage.removeItem(STORAGE_KEY);
+          const empty = [];
+          renderEntries(empty);
+          renderSummary(empty);
+        }
+      });
+
+      applyFiltersBtn.addEventListener("click", () => {
+        const current = loadEntries();
+        renderEntries(current, {
+          substance: filterSubstance.value || "",
+          from: filterFrom.value || "",
+          to: filterTo.value || "",
+        });
+      });
+
+      clearFiltersBtn.addEventListener("click", () => {
+        filterSubstance.value = "";
+        filterFrom.value = "";
+        filterTo.value = "";
+        const current = loadEntries();
+        renderEntries(current);
+      });
+    });
+  </script>
+</body>
+</html>
