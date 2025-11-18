@@ -24,9 +24,7 @@
         "Segoe UI", sans-serif;
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
@@ -47,9 +45,7 @@
     }
 
     @media (min-width: 900px) {
-      .app {
-        padding: 32px 8px 48px;
-      }
+      .app { padding: 32px 8px 48px; }
     }
 
     .header {
@@ -124,9 +120,7 @@
     }
 
     @media (max-width: 900px) {
-      .layout {
-        grid-template-columns: 1fr;
-      }
+      .layout { grid-template-columns: 1fr; }
     }
 
     .card {
@@ -156,31 +150,6 @@
       color: var(--muted);
     }
 
-    .pill-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 8px;
-      margin-top: 4px;
-    }
-
-    .pill {
-      padding: 4px 8px;
-      border-radius: 999px;
-      background: rgba(15, 23, 42, 0.95);
-      border: 1px solid rgba(55, 65, 81, 0.85);
-      font-size: 11px;
-      color: var(--muted);
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .pill strong {
-      color: var(--text);
-      font-weight: 600;
-    }
-
     form {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -189,9 +158,7 @@
     }
 
     @media (max-width: 600px) {
-      form {
-        grid-template-columns: 1fr;
-      }
+      form { grid-template-columns: 1fr; }
     }
 
     .field {
@@ -201,14 +168,7 @@
       font-size: 13px;
     }
 
-    .field label {
-      color: var(--muted);
-    }
-
-    .field-row {
-      display: flex;
-      gap: 8px;
-    }
+    .field label { color: var(--muted); }
 
     input[type="text"],
     input[type="number"],
@@ -229,9 +189,7 @@
     }
 
     input::placeholder,
-    textarea::placeholder {
-      color: #6b7280;
-    }
+    textarea::placeholder { color: #6b7280; }
 
     input:focus,
     select:focus,
@@ -331,9 +289,7 @@
       font-size: 12px;
     }
 
-    thead {
-      background: rgba(15, 23, 42, 0.98);
-    }
+    thead { background: rgba(15, 23, 42, 0.98); }
 
     th,
     td {
@@ -387,6 +343,12 @@
       border-color: rgba(250, 204, 21, 0.85);
       color: #fef9c3;
       background: rgba(113, 63, 18, 0.9);
+    }
+
+    .pill-mini.substance-alcohol {
+      border-color: rgba(248, 113, 113, 0.9);
+      color: #fee2e2;
+      background: rgba(127, 29, 29, 0.9);
     }
 
     .pill-mini.substance-other {
@@ -474,30 +436,17 @@
       gap: 4px;
     }
 
-    .summary-chip-label {
-      color: var(--muted);
-    }
+    .summary-chip-label { color: var(--muted); }
 
     .summary-chip-value {
       font-size: 15px;
       font-weight: 600;
     }
 
-    .summary-chip.substance-nac {
-      border-color: rgba(56, 189, 248, 0.8);
-    }
-
-    .summary-chip.substance-ashwagandha {
-      border-color: rgba(74, 222, 128, 0.9);
-    }
-
-    .summary-chip.substance-kratom {
-      border-color: rgba(250, 204, 21, 0.85);
-    }
-
-    .summary-chip.substance-other {
-      border-color: rgba(148, 163, 184, 0.9);
-    }
+    .summary-chip.substance-nac { border-color: rgba(56, 189, 248, 0.8); }
+    .summary-chip.substance-ashwagandha { border-color: rgba(74, 222, 128, 0.9); }
+    .summary-chip.substance-kratom { border-color: rgba(250, 204, 21, 0.85); }
+    .summary-chip.substance-other { border-color: rgba(148, 163, 184, 0.9); }
 
     .empty-state {
       padding: 12px;
@@ -511,6 +460,49 @@
       font-size: 11px;
       margin-top: 6px;
     }
+
+    .insights {
+      border-radius: 12px;
+      padding: 10px 10px 8px;
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid rgba(55, 65, 81, 0.9);
+      margin-bottom: 8px;
+    }
+
+    .insights-title {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .insights-list {
+      list-style: none;
+      padding-left: 14px;
+      margin: 0;
+      font-size: 12px;
+      color: var(--text);
+    }
+
+    .insights-list li {
+      margin-bottom: 3px;
+      position: relative;
+    }
+
+    .insights-list li::before {
+      content: "•";
+      position: absolute;
+      left: -10px;
+      color: var(--accent);
+    }
+
+    .insights-note {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
   </style>
 </head>
 <body>
@@ -520,7 +512,7 @@
         <div class="title-logo">Δ</div>
         <div class="title-text">
           <h1>Tracker látek a doplňků</h1>
-          <p>Lokální log pro NAC, ashwagandhu, kratom a cokoliv dalšího.</p>
+          <p>Lokální log pro NAC, ashwagandhu, kratom, alkohol a cokoliv dalšího.</p>
         </div>
       </div>
       <div class="tag">
@@ -557,6 +549,7 @@
               <option value="NAC">NAC</option>
               <option value="Ashwagandha">Ashwagandha</option>
               <option value="Kratom">Kratom</option>
+              <option value="Alkohol">Alkohol</option>
               <option value="Jiné">Jiné (vlastní)</option>
             </select>
           </div>
@@ -572,13 +565,19 @@
           </div>
 
           <div class="field">
-            <label for="dose">Dávka</label>
+            <label for="doseSelect">Dávka</label>
+            <select id="doseSelect" name="doseSelect" required>
+              <option value="">Vyber dávku…</option>
+            </select>
+          </div>
+
+          <div class="field" id="custom-dose-field" style="display:none;">
+            <label for="dose">Vlastní dávka</label>
             <input
               type="text"
               id="dose"
               name="dose"
-              placeholder="Např. 600 mg, 1 kapsle, 3 g…"
-              required
+              placeholder="Zadej vlastní dávku…"
             />
           </div>
 
@@ -617,7 +616,7 @@
           </div>
 
           <div class="danger-text" style="grid-column: 1 / -1;">
-            Suplementy ani appka ti z ničeho nedělají zdravý návyk. Sleduješ realitu, neomlouváš ji.
+            Suplementy, alkohol ani appka z ničeho nedělají zdravý návyk. Sleduješ realitu, neomlouváš ji.
           </div>
         </form>
       </section>
@@ -630,6 +629,14 @@
             <div class="card-subtitle">
               Lokální log – filtruj podle látky a období.
             </div>
+          </div>
+        </div>
+
+        <div class="insights" id="insights">
+          <div class="insights-title">Dnešní doporučení (heuristika)</div>
+          <ul class="insights-list" id="insights-list"></ul>
+          <div class="insights-note">
+            Je to jen jednoduché vyhodnocení tvých záznamů, ne lékařské doporučení ani „povolenka“ k alkoholu.
           </div>
         </div>
 
@@ -647,7 +654,7 @@
             <div class="summary-chip-value" id="summary-kratom">0</div>
           </div>
           <div class="summary-chip substance-other">
-            <div class="summary-chip-label">Jiné (posledních 7 dní)</div>
+            <div class="summary-chip-label">Jiné / alkohol (posledních 7 dní)</div>
             <div class="summary-chip-value" id="summary-other">0</div>
           </div>
         </div>
@@ -661,6 +668,7 @@
                 <option value="NAC">NAC</option>
                 <option value="Ashwagandha">Ashwagandha</option>
                 <option value="Kratom">Kratom</option>
+                <option value="Alkohol">Alkohol</option>
                 <option value="Jiné">Jiné</option>
               </select>
             </label>
@@ -742,6 +750,7 @@
       if (label.includes("nac")) return "substance-nac";
       if (label.includes("ashwagandha")) return "substance-ashwagandha";
       if (label.includes("kratom")) return "substance-kratom";
+      if (label.includes("alkohol")) return "substance-alcohol";
       return "substance-other";
     }
 
@@ -751,7 +760,6 @@
 
       body.innerHTML = "";
 
-      // filtrování
       let filtered = [...entries];
       if (filters.substance) {
         filtered = filtered.filter((e) => e.substance === filters.substance);
@@ -763,7 +771,6 @@
         filtered = filtered.filter((e) => e.date <= filters.to);
       }
 
-      // seřadit od nejnovějšího
       filtered.sort((a, b) => {
         const ad = a.date + "T" + (a.time || "00:00");
         const bd = b.date + "T" + (b.time || "00:00");
@@ -864,11 +871,95 @@
       if (!timeInput.value) timeInput.value = `${hh}:${mi}`;
     }
 
+    function computeInsights(entries) {
+      const insights = [];
+      const now = new Date();
+      const yyyy = now.getFullYear();
+      const mm = String(now.getMonth() + 1).padStart(2, "0");
+      const dd = String(now.getDate()).padStart(2, "0");
+      const todayStr = `${yyyy}-${mm}-${dd}`;
+
+      const todayEntries = entries.filter(e => e.date === todayStr);
+
+      const alcoholEntries = entries
+        .filter(e => e.substance === "Alkohol")
+        .sort((a, b) => (a.date + "T" + (a.time || "00:00")).localeCompare(b.date + "T" + (b.time || "00:00")));
+
+      let lastAlcohol = null;
+      if (alcoholEntries.length > 0) {
+        const last = alcoholEntries[alcoholEntries.length - 1];
+        const dt = new Date(last.date + "T" + (last.time || "00:00"));
+        if (!isNaN(dt.getTime())) {
+          lastAlcohol = dt;
+        }
+      }
+
+      const hoursSince = lastAlcohol ? (now - lastAlcohol) / (1000 * 60 * 60) : null;
+
+      const kratomToday = todayEntries.some(e => getSubstanceClass(e.substance, e.customSubstance) === "substance-kratom");
+      const alcoholToday = todayEntries.some(e => e.substance === "Alkohol");
+
+      const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+      let ashwCount7 = 0;
+      let nacCount7 = 0;
+
+      for (const e of entries) {
+        if (!e.date) continue;
+        const dt = new Date(e.date + "T" + (e.time || "00:00"));
+        if (isNaN(dt.getTime()) || dt < sevenDaysAgo) continue;
+        const cls = getSubstanceClass(e.substance, e.customSubstance);
+        if (cls === "substance-ashwagandha") ashwCount7++;
+        if (cls === "substance-nac") nacCount7++;
+      }
+
+      const ashwToday = todayEntries.some(e => getSubstanceClass(e.substance, e.customSubstance) === "substance-ashwagandha");
+
+      // Alkohol v posledních 24h
+      if (hoursSince !== null && hoursSince <= 24) {
+        insights.push("Máš záznam alkoholu v posledních 24 hodinách. Bezpečnější je teď nepřidávat další alkohol ani jiné látky či doplňky.");
+      }
+
+      // Kratom dnes
+      if (kratomToday) {
+        insights.push("Dnes máš lognutý kratom. Kombinace s alkoholem zvyšuje zátěž a rizika, takže alkohol je dnes spíš špatný nápad.");
+      }
+
+      // Ashwagandha – časté užívání
+      if (ashwCount7 >= 5) {
+        insights.push(`Ashwagandhu bereš často (${ashwCount7}× za posledních 7 dní). Adaptogeny je dobré cyklovat – dnešní pauza dává smysl.`);
+      } else if (!ashwToday && !alcoholToday && !kratomToday) {
+        insights.push("Ashwagandhu jsi dnes ještě nebral. Pokud ji chceš použít kvůli stresu nebo spánku, rozumnější je spíš večer a bez alkoholu okolo.");
+      }
+
+      // NAC – dlouhodobé užívání
+      if (nacCount7 >= 6) {
+        insights.push(`NAC máš skoro denně (${nacCount7}× za posledních 7 dní). Zkus si občas ověřit, jestli pro tak časté užívání máš reálný důvod.`);
+      }
+
+      if (insights.length === 0) {
+        insights.push("Z dnešních dat nevyplývá nic zásadního. Pořád ale platí, že nejméně rizikovou volbou je alkohol vynechat úplně.");
+      }
+
+      return insights;
+    }
+
+    function renderInsights(entries) {
+      const listEl = document.getElementById("insights-list");
+      listEl.innerHTML = "";
+      const insights = computeInsights(entries);
+      insights.forEach(text => {
+        const li = document.createElement("li");
+        li.textContent = text;
+        listEl.appendChild(li);
+      });
+    }
+
     document.addEventListener("DOMContentLoaded", () => {
       const entries = loadEntries();
       setTodayDefaults();
       renderEntries(entries);
       renderSummary(entries);
+      renderInsights(entries);
 
       const form = document.getElementById("entry-form");
       const resetBtn = document.getElementById("reset-form");
@@ -878,19 +969,61 @@
       const filterTo = document.getElementById("filter-to");
       const applyFiltersBtn = document.getElementById("apply-filters");
       const clearFiltersBtn = document.getElementById("clear-filters");
-      const substanceSelect = document.getElementById("substance");
-      const customSubstanceField = document.getElementById(
-        "custom-substance-field"
-      );
 
-      substanceSelect.addEventListener("change", () => {
+      const substanceSelect = document.getElementById("substance");
+      const customSubstanceField = document.getElementById("custom-substance-field");
+      const doseSelect = document.getElementById("doseSelect");
+      const customDoseField = document.getElementById("custom-dose-field");
+
+      const PRESETS = {
+        "NAC": ["600 mg", "1200 mg"],
+        "Ashwagandha": ["400 mg", "800 mg"],
+        "Kratom": ["1 g", "2 g", "3 g", "4 g", "5 g"],
+        "Alkohol": ["2 piva", "3 piva", "4 panáky", "0,5 l vína", "Vlastní…"],
+        "Jiné": ["Vlastní…"]
+      };
+
+      function updateDoseOptions(substance) {
+        doseSelect.innerHTML = `<option value="">Vyber dávku…</option>`;
+        if (!PRESETS[substance]) return;
+        PRESETS[substance].forEach((d) => {
+          const option = document.createElement("option");
+          option.value = d;
+          option.textContent = d;
+          doseSelect.appendChild(option);
+        });
+      }
+
+      function updateCustomFieldsVisibility() {
         if (substanceSelect.value === "Jiné") {
           customSubstanceField.style.display = "flex";
         } else {
           customSubstanceField.style.display = "none";
-          document.getElementById("customSubstance").value = "";
+          const cs = document.getElementById("customSubstance");
+          if (cs) cs.value = "";
         }
+
+        if (doseSelect.value === "Vlastní…" || substanceSelect.value === "Jiné") {
+          customDoseField.style.display = "flex";
+        } else {
+          customDoseField.style.display = "none";
+          const d = document.getElementById("dose");
+          if (d) d.value = "";
+        }
+      }
+
+      substanceSelect.addEventListener("change", () => {
+        const value = substanceSelect.value;
+        updateDoseOptions(value);
+        updateCustomFieldsVisibility();
       });
+
+      doseSelect.addEventListener("change", () => {
+        updateCustomFieldsVisibility();
+      });
+
+      updateDoseOptions(substanceSelect.value);
+      updateCustomFieldsVisibility();
 
       form.addEventListener("submit", (e) => {
         e.preventDefault();
@@ -898,13 +1031,25 @@
         const date = formData.get("date");
         const time = formData.get("time");
         const substance = formData.get("substance");
-        const customSubstance = formData.get("customSubstance")?.trim();
-        const dose = formData.get("dose");
+        const customSubstance = formData.get("customSubstance")?.toString().trim() || "";
+
+        let dose = formData.get("doseSelect") || "";
+        const customDose = formData.get("dose")?.toString().trim() || "";
+
+        if (!dose || dose === "Vlastní…") {
+          dose = customDose;
+        }
+
         const mood = Number(formData.get("mood") || 0);
         const notes = formData.get("notes")?.toString().trim();
 
-        if (!date || !time || !substance || !dose) {
-          alert("Vyplň minimálně datum, čas, látku a dávku.");
+        if (!date || !time || !substance) {
+          alert("Vyplň minimálně datum, čas a látku.");
+          return;
+        }
+
+        if (!dose) {
+          alert("Vyber nebo zadej dávku.");
           return;
         }
 
@@ -928,30 +1073,28 @@
           to: filterTo.value || "",
         });
         renderSummary(current);
+        renderInsights(current);
 
         form.reset();
         setTodayDefaults();
-        customSubstanceField.style.display =
-          substanceSelect.value === "Jiné" ? "flex" : "none";
+        updateDoseOptions("");
+        updateCustomFieldsVisibility();
       });
 
       resetBtn.addEventListener("click", () => {
         form.reset();
         setTodayDefaults();
-        customSubstanceField.style.display =
-          substanceSelect.value === "Jiné" ? "flex" : "none";
+        updateDoseOptions("");
+        updateCustomFieldsVisibility();
       });
 
       clearAllBtn.addEventListener("click", () => {
-        if (
-          confirm(
-            "Fakt chceš smazat všechna uložená data? Tohle nejde vrátit."
-          )
-        ) {
+        if (confirm("Fakt chceš smazat všechna uložená data? Tohle nejde vrátit.")) {
           localStorage.removeItem(STORAGE_KEY);
           const empty = [];
           renderEntries(empty);
           renderSummary(empty);
+          renderInsights(empty);
         }
       });
 
